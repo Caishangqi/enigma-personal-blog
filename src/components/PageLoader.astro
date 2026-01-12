@@ -1,0 +1,44 @@
+﻿---
+/**
+ * Global page loader component for View Transitions
+ * Shows loading overlay during page navigation AND initial page load
+ * 
+ * Usage: Place this component at the beginning of <body> in every page
+ */
+---
+
+<!-- Loading overlay - VISIBLE by default, hidden after page loads -->
+<div
+  id="page-loader"
+  class="loading fixed inset-0 z-50 transition-opacity duration-300 flex flex-col items-center justify-center bg-black/80 opacity-100 pointer-events-auto"
+>
+  <img src="/loading.webp" alt="Loading" class="w-28" />
+</div>
+
+<script>
+  // Handle View Transitions loading state
+  function showLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+      loader.classList.remove('opacity-0', 'pointer-events-none');
+      loader.classList.add('opacity-100', 'pointer-events-auto');
+    }
+  }
+
+  function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+      loader.classList.remove('opacity-100', 'pointer-events-auto');
+      loader.classList.add('opacity-0', 'pointer-events-none');
+    }
+  }
+
+  // Hide loader on initial page load (for refresh/first visit)
+  document.addEventListener('astro:page-load', hideLoader);
+
+  // Show loader when navigation starts (for View Transitions)
+  document.addEventListener('astro:before-preparation', showLoader);
+
+  // Hide loader after page swap
+  document.addEventListener('astro:after-swap', hideLoader);
+</script>
