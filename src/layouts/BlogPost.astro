@@ -1,86 +1,122 @@
 ---
-import { Image } from 'astro:assets';
+/**
+ * Blog post detail layout
+ * Matching Origin Realms blog post style exactly
+ * Structure: Hero Image -> Title -> Category/Date -> Content -> Looking For More
+ */
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import PageLoader from '../components/PageLoader.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+// React components (same as home page)
+import Header from '../components/react/Header';
+import Footer from '../components/react/Footer';
+import LookingForMore from '../components/react/LookingForMore';
+import TableOfContents from '../components/react/TableOfContents';
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+// Types
+import type { BlogPost } from '../types';
+
+// Utilities - reuse existing functions (DRY principle)
+import { formatDate, DEFAULT_CATEGORY_COLOR } from '../utils';
+
+// Constants
+import {
+  SITE_TITLE,
+  NAV_LINKS,
+  SOCIAL_LINKS,
+  FOOTER_CONFIG,
+} from '../consts';
+
+// Piston animation images for Footer
+import pistonBase from '../assets/animations/piston-base.png';
+import pistonHead from '../assets/animations/piston-head.png';
+import pistonNeck from '../assets/animations/piston-neck.png';
+
+const pistonImages = {
+  base: pistonBase.src,
+  head: pistonHead.src,
+  neck: pistonNeck.src,
+};
+
+type Props = CollectionEntry<'blog'>['data'] & {
+  recommendedPosts?: BlogPost[];
+};
+
+const { title, description, pubDate, updatedDate, heroImage, category, categoryColor, recommendedPosts = [] } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+  <head>
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
+  </head>
+  <body class="bg-black text-gray-500">
+    <PageLoader />
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+    <main class="pageContent">
+      <!-- Header - same as home page -->
+      <div class="container mx-auto">
+        <Header
+          client:load
+          siteTitle={SITE_TITLE}
+          navLinks={NAV_LINKS}
+          socialLinks={SOCIAL_LINKS}
+          currentPath="/blog"
+        />
+      </div>
+
+      <!-- Article content - matching Origin Realms exactly -->
+      <div class="container mx-auto pt-10">
+        <!-- Hero image - bg-cover bg-center rounded-md pb-[56%] mb-16 -->
+        {heroImage && (
+          <div 
+            class="bg-cover bg-center rounded-md pb-[56%] mb-16"
+            style={`background-image: url("${heroImage.src}");`}
+          />
+        )}
+
+        <!-- Title - text-3xl font-bold text-white mb-2 text-center -->
+        <h1 class="text-3xl font-bold text-white mb-2 text-center">{title}</h1>
+
+        <!-- Meta - flex items-center justify-center text-gray-600 font-bold mb-8 -->
+        <div class="meta flex items-center justify-center text-gray-600 font-bold mb-8">
+          {category && (
+            <>
+              <div style={`color: ${categoryColor || DEFAULT_CATEGORY_COLOR};`}>{category}</div>
+              <div class="px-2">–</div>
+            </>
+          )}
+          <time>{formatDate(pubDate)}</time>
+        </div>
+
+        <!-- Article body wrapper -->
+        <div class="relative">
+          <!-- Table of Contents - fixed left sidebar on lg screens -->
+          <TableOfContents client:load />
+
+          <!-- Prose content - all styles defined in global.css matching Origin Realms exactly -->
+          <div class="prose mx-auto">
+            <slot />
+          </div>
+        </div>
+
+        <!-- Looking For More section - matching Origin Realms exactly -->
+        {recommendedPosts.length > 0 && (
+          <LookingForMore client:visible posts={recommendedPosts} />
+        )}
+      </div>
+
+      <!-- Footer - same as home page -->
+      <div class="container mx-auto">
+        <Footer
+          client:visible
+          email={FOOTER_CONFIG.email}
+          socialLinks={SOCIAL_LINKS}
+          copyright={FOOTER_CONFIG.copyright}
+          pistonImages={pistonImages}
+        />
+      </div>
+    </main>
+  </body>
 </html>
