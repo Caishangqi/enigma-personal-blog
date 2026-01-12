@@ -3,9 +3,20 @@ title: 'Markdown Style Guide'
 description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
 pubDate: 'Jun 19 2024'
 heroImage: '../../assets/blog-placeholder-1.jpg'
+category: 'Guide'
+categoryColor: '#3B82F6'
 ---
 
 Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
+
+## Video Embed
+
+<figure class="kg-card kg-embed-card kg-card-hascaption">
+  <div class="iframe-wrap" style="padding-bottom: 56.25%">
+    <iframe width="200" height="113" src="https://www.youtube.com/embed/jnOqC-TLhaU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="The Aether Without Mods"></iframe>
+  </div>
+  <figcaption>The Aether x Origin Realms Trailer</figcaption>
+</figure>
 
 ## Headings
 
@@ -40,6 +51,22 @@ Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sap
 ### Output
 
 ![blog placeholder](../../assets/blog-placeholder-about.jpg)
+
+### Image with Caption
+
+To add a caption below an image, use italic text immediately after the image:
+
+#### Syntax
+
+```markdown
+![Alt text](./image.png)
+*This is the image caption*
+```
+
+#### Output
+
+![blog placeholder](../../assets/blog-placeholder-about.jpg)
+*Blog Placeholder Image Caption*
 
 ## Blockquotes
 
