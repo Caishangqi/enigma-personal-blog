@@ -1,0 +1,135 @@
+---
+/**
+ * Blog listing page with pagination
+ * URL: /blog/1, /blog/2, etc.
+ * Uses Astro's getStaticPaths with paginate() for static generation
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import PageLoader from '../../components/PageLoader.astro';
+
+// React components
+import Header from '../../components/react/Header';
+import Footer from '../../components/react/Footer';
+import BlogCard from '../../components/react/BlogCard';
+import Pagination from '../../components/react/Pagination';
+
+// Constants
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  NAV_LINKS,
+  SOCIAL_LINKS,
+  FOOTER_CONFIG,
+} from '../../consts';
+
+// Piston animation images for Footer
+import pistonBase from '../../assets/animations/piston-base.png';
+import pistonHead from '../../assets/animations/piston-head.png';
+import pistonNeck from '../../assets/animations/piston-neck.png';
+
+const pistonImages = {
+  base: pistonBase.src,
+  head: pistonHead.src,
+  neck: pistonNeck.src,
+};
+
+// Posts per page (Origin Realms uses 16, we use 6)
+const POSTS_PER_PAGE = 6;
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // Get all blog posts sorted by date (newest first)
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+
+  // Generate paginated pages (use literal 6 as POSTS_PER_PAGE is not accessible here)
+  return paginate(posts, { pageSize: 6 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+// Transform posts for BlogCard component
+const blogPosts = page.data.map((post) => ({
+  slug: post.id,
+  title: post.data.title,
+  description: post.data.description || post.body,
+  pubDate: post.data.pubDate,
+  category: post.data.category,
+  categoryColor: post.data.categoryColor,
+  backgroundImage: post.data.heroImage?.src,
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={page.currentPage === 1 ? `Blog | ${SITE_TITLE}` : `Blog - Page ${page.currentPage} | ${SITE_TITLE}`}
+      description={SITE_DESCRIPTION}
+    />
+  </head>
+  <body class="bg-black text-gray-500">
+    <PageLoader />
+
+    <main class="pageContent">
+      <!-- Header -->
+      <div class="container mx-auto">
+        <Header
+          client:load
+          siteTitle={SITE_TITLE}
+          navLinks={NAV_LINKS}
+          socialLinks={SOCIAL_LINKS}
+          currentPath="/blog"
+        />
+      </div>
+
+      <!-- Blog content -->
+      <div class="container mx-auto pt-12">
+        <!-- Blog posts grid - 2 columns like Origin Realms -->
+        <div class="blog-list grid md:grid-cols-2 gap-8">
+          {
+            blogPosts.map((post) => (
+              <BlogCard
+                client:visible
+                slug={post.slug}
+                title={post.title}
+                description={post.description}
+                pubDate={post.pubDate}
+                category={post.category}
+                categoryColor={post.categoryColor}
+                backgroundImage={post.backgroundImage}
+              />
+            ))
+          }
+        </div>
+
+        {page.data.length === 0 && (
+          <div class="text-center py-12">
+            <p class="text-gray-400 text-lg">No blog posts yet. Check back soon!</p>
+          </div>
+        )}
+
+        <!-- Pagination -->
+        <Pagination
+          client:visible
+          currentPage={page.currentPage}
+          totalPages={page.lastPage}
+          baseUrl="/blog"
+        />
+      </div>
+
+      <!-- Footer -->
+      <div class="container mx-auto">
+        <Footer
+          client:visible
+          email={FOOTER_CONFIG.email}
+          socialLinks={SOCIAL_LINKS}
+          copyright={FOOTER_CONFIG.copyright}
+          pistonImages={pistonImages}
+        />
+      </div>
+    </main>
+  </body>
+</html>
