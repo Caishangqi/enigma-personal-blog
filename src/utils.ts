@@ -46,3 +46,39 @@ export const DEFAULT_CATEGORY_COLOR = '#F5B72B';
  * Default max description length (Origin Realms uses ~200 characters)
  */
 export const DEFAULT_MAX_DESCRIPTION_LENGTH = 200;
+
+/**
+ * Calculate relative time from a date to now
+ * Returns format like "4 Months ago", "1 Year ago", "2 Days ago"
+ */
+export function getRelativeTime(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30);
+  const diffYears = Math.floor(diffDays / 365);
+
+  if (diffYears > 0) {
+    return diffYears === 1 ? '1 Year ago' : `${diffYears} Years ago`;
+  }
+  if (diffMonths > 0) {
+    return diffMonths === 1 ? '1 Month ago' : `${diffMonths} Months ago`;
+  }
+  if (diffWeeks > 0) {
+    return diffWeeks === 1 ? '1 Week ago' : `${diffWeeks} Weeks ago`;
+  }
+  if (diffDays > 0) {
+    return diffDays === 1 ? '1 Day ago' : `${diffDays} Days ago`;
+  }
+  if (diffHours > 0) {
+    return diffHours === 1 ? '1 Hour ago' : `${diffHours} Hours ago`;
+  }
+  if (diffMinutes > 0) {
+    return diffMinutes === 1 ? '1 Minute ago' : `${diffMinutes} Minutes ago`;
+  }
+  return 'Just now';
+}

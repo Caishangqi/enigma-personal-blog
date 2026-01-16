@@ -116,3 +116,24 @@ export interface BlogPost {
 export interface LookingForMoreProps {
   posts: BlogPost[];
 }
+
+// Project link item
+export interface ProjectLink {
+  name: string;
+  url: string;
+}
+
+// ProjectCard component props (matches design specification)
+export interface ProjectCardProps {
+  slug: string;
+  title: string;
+  description?: string;
+  updatedDate?: Date;
+  category?: string;
+  categoryColor?: string;
+  heroImage?: string;
+  iconImage?: string;
+  tags?: string[];
+  // Maximum characters for description truncation
+  maxDescriptionLength?: number;
+}
