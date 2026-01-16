@@ -18,8 +18,7 @@ export default function SocialSection({
           <img
             src={decorationImage}
             alt="Social decoration"
-            className="mx-auto lg:ml-0"
-            style={{ height: '320px', width: 'auto' }}
+            className="mx-auto lg:ml-0 h-[320px] w-auto"
             loading="lazy"
           />
         </div>

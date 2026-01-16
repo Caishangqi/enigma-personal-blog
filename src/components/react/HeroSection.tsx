@@ -11,8 +11,7 @@ export default function HeroSection({ imageSrc, imageAlt }: HeroSectionProps) {
       <img
         src={imageSrc}
         alt={imageAlt}
-        className="absolute md:relative xl:absolute inset-0 object-cover xl:object-contain"
-        style={{ width: '100%', height: '100%' }}
+        className="absolute md:relative xl:absolute inset-0 object-cover xl:object-contain w-full h-full"
         loading="eager"
       />
     </header>

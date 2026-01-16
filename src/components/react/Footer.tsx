@@ -43,7 +43,7 @@ function SocialIcon({ platform }: { platform: SocialPlatform }) {
 
 export default function Footer({ email, socialLinks, copyright, pistonImages }: FooterWithPistonProps) {
   return (
-    <footer className="page-footer relative mt-16 mb-4 lg:mb-16 rounded-md" style={{ backgroundColor: 'rgb(250, 192, 33)' }}>
+    <footer className="page-footer relative mt-16 mb-4 lg:mb-16 rounded-md bg-footer-bg">
       {/* Piston decoration with hover animation - controlled by CSS */}
       {pistonImages && (
         <a

@@ -8,6 +8,8 @@
     --color-parchment: #E8E0CC;
     --color-footer-bg: #FAC021;
     --color-yellow-btn: #EAA21A;
+    --color-yellow-btn-text: rgb(135, 82, 43);
+    --color-yellow-btn-hover: #FACC15;
     --color-orange-accent: #F97316;
     --color-blue-accent: #3B82F6;
     --color-body-text: #B3B7BC;
@@ -734,8 +736,9 @@ button.bg-discord:hover {
 
 /* ============================================
    Project Card Styles
-   Layout: Top heroImage (banner) + Bottom content
-   Content: Left icon + Right info (title, category, description, tags + last update)
+   Desktop: Top heroImage (banner) + Bottom content (icon left + info right)
+   Mobile: Icon overlays on banner bottom-left, title+category in same row
+   Uses two icon elements with show/hide for clean responsive behavior
    ============================================ */
 
 /* Project card - vertical layout */
@@ -746,6 +749,11 @@ button.bg-discord:hover {
 
 .project-card:hover {
     color: inherit;
+}
+
+/* Hero section - contains banner and mobile icon */
+.project-card .hero-section {
+    @apply relative;
 }
 
 /* Hero image - top banner */
@@ -759,18 +767,12 @@ button.bg-discord:hover {
     transform: scale(0.98);
 }
 
-/* Content section - bottom area */
+/* Content section - bottom area with desktop icon and info */
 .project-card .content-section {
     @apply flex p-6 gap-5 items-start;
 }
 
-@media (max-width: 600px) {
-    .project-card .content-section {
-        @apply flex-col;
-    }
-}
-
-/* Icon wrapper - left side */
+/* Icon wrapper - base styles */
 .project-card .icon-wrapper {
     @apply shrink-0 rounded-lg inline-block;
     padding: 8px;
@@ -785,16 +787,24 @@ button.bg-discord:hover {
     height: 180px;
 }
 
-@media (max-width: 600px) {
-    .project-card .card-icon {
-        width: 80px;
-        height: 80px;
-    }
+/* Desktop icon - visible on desktop, hidden on mobile */
+.project-card .icon-desktop {
+    display: inline-block;
+}
+
+/* Mobile icon - hidden on desktop, visible on mobile */
+.project-card .icon-mobile {
+    display: none;
 }
 
 /* Info wrapper - right side */
 .project-card .info-wrapper {
     @apply flex-grow flex flex-col justify-between self-stretch;
+}
+
+/* Title row - contains title and category */
+.project-card .title-row {
+    @apply flex flex-col;
 }
 
 /* Project title */
@@ -805,14 +815,14 @@ button.bg-discord:hover {
     color: white;
 }
 
-/* Project category - same style as update-info */
+/* Project category */
 .project-card .project-category {
     @apply font-bold;
     margin: 4px 0 4px 0;
     font-size: 16px;
 }
 
-/* Project description - same style as blog-card description */
+/* Project description */
 .project-card .project-description {
     margin: 0;
     font-size: 18px;
@@ -828,17 +838,14 @@ button.bg-discord:hover {
 /* Footer row - tags + last update */
 .project-card .footer-row {
     @apply flex justify-between items-end mt-auto;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-@media (max-width: 600px) {
-    .project-card .footer-row {
-        @apply flex-col items-start gap-4;
-    }
-}
-
-/* Tags group */
+/* Tags group - always horizontal, no wrap */
 .project-card .tags-group {
-    @apply flex flex-wrap gap-2;
+    @apply flex gap-2;
+    flex-wrap: nowrap;
 }
 
 .project-card .tag {
@@ -850,13 +857,13 @@ button.bg-discord:hover {
     white-space: nowrap;
 }
 
-/* Update info - same style as blog-card meta */
+/* Update info */
 .project-card .update-info {
     @apply flex items-center font-bold;
     font-size: 16px;
     color: var(--color-meta-text);
     white-space: nowrap;
-    margin-left: 20px;
+    margin-left: auto; /* Always align right, works for both same-row and wrapped */
 }
 
 .project-card .update-info .update-label {
@@ -868,7 +875,73 @@ button.bg-discord:hover {
     padding-right: 8px;
 }
 
+/* ============================================
+   Project Card - Mobile Responsive (max-width: 600px)
+   - Show mobile icon (overlay on banner), hide desktop icon
+   - Title and Category in same row (space-between)
+   - Tags hidden
+   - Update info right-aligned
+   ============================================ */
 @media (max-width: 600px) {
+    /* Hide desktop icon, show mobile icon */
+    .project-card .icon-desktop {
+        display: none;
+    }
+
+    .project-card .icon-mobile {
+        display: inline-block;
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        padding: 4px;
+        border: 4px solid rgb(30, 30, 30);
+        z-index: 10;
+    }
+
+    .project-card .icon-mobile .card-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    /* Content section */
+    .project-card .content-section {
+        @apply p-4;
+    }
+
+    /* Title row - horizontal layout with space-between */
+    .project-card .title-row {
+        @apply flex-row justify-between items-baseline;
+    }
+
+    .project-card .project-title {
+        font-size: 20px;
+    }
+
+    .project-card .project-category {
+        margin: 0;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    /* Description */
+    .project-card .project-description {
+        font-size: 16px;
+        line-height: 24px;
+        margin-top: 8px;
+    }
+
+    /* Footer row - only update info, right-aligned */
+    .project-card .footer-row {
+        @apply justify-end;
+        margin-top: 12px;
+    }
+
+    /* Hide tags on mobile */
+    .project-card .tags-group {
+        display: none;
+    }
+
+    /* Update info - no left margin */
     .project-card .update-info {
         margin-left: 0;
     }
