@@ -731,3 +731,156 @@ button.bg-discord:hover {
     text-align: center;
     margin-top: 16px;
 }
+
+/* ============================================
+   Project Card Styles
+   Layout: Top heroImage (banner) + Bottom content
+   Content: Left icon + Right info (title, category, description, tags + last update)
+   ============================================ */
+
+/* Project card - vertical layout */
+.project-card {
+    @apply block rounded-xl overflow-hidden;
+    color: inherit;
+}
+
+.project-card:hover {
+    color: inherit;
+}
+
+/* Hero image - top banner */
+.project-card .card-hero {
+    @apply bg-cover bg-gray-900 bg-center rounded-md overflow-hidden transition-transform;
+    width: 100%;
+    aspect-ratio: 900 / 300;
+}
+
+.project-card:hover .card-hero {
+    transform: scale(0.98);
+}
+
+/* Content section - bottom area */
+.project-card .content-section {
+    @apply flex p-6 gap-5 items-start;
+}
+
+@media (max-width: 600px) {
+    .project-card .content-section {
+        @apply flex-col;
+    }
+}
+
+/* Icon wrapper - left side */
+.project-card .icon-wrapper {
+    @apply shrink-0 rounded-lg inline-block;
+    padding: 8px;
+    background-color: rgb(32, 35, 36);
+    line-height: 0;
+}
+
+/* Icon image - square */
+.project-card .card-icon {
+    @apply bg-cover bg-center rounded-lg block;
+    width: 180px;
+    height: 180px;
+}
+
+@media (max-width: 600px) {
+    .project-card .card-icon {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Info wrapper - right side */
+.project-card .info-wrapper {
+    @apply flex-grow flex flex-col justify-between self-stretch;
+}
+
+/* Project title */
+.project-card .project-title {
+    @apply m-0 font-bold;
+    font-size: 28px;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+/* Project category - same style as update-info */
+.project-card .project-category {
+    @apply font-bold;
+    margin: 4px 0 4px 0;
+    font-size: 16px;
+}
+
+/* Project description - same style as blog-card description */
+.project-card .project-description {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-desc-text);
+    line-height: 28px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Footer row - tags + last update */
+.project-card .footer-row {
+    @apply flex justify-between items-end mt-auto;
+}
+
+@media (max-width: 600px) {
+    .project-card .footer-row {
+        @apply flex-col items-start gap-4;
+    }
+}
+
+/* Tags group */
+.project-card .tags-group {
+    @apply flex flex-wrap gap-2;
+}
+
+.project-card .tag {
+    @apply rounded font-bold;
+    background-color: rgb(38, 42, 46);
+    color: rgb(153, 153, 153);
+    padding: 4px 12px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+/* Update info - same style as blog-card meta */
+.project-card .update-info {
+    @apply flex items-center font-bold;
+    font-size: 16px;
+    color: var(--color-meta-text);
+    white-space: nowrap;
+    margin-left: 20px;
+}
+
+.project-card .update-info .update-label {
+    color: #F5B72B;
+}
+
+.project-card .update-info .separator {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+@media (max-width: 600px) {
+    .project-card .update-info {
+        margin-left: 0;
+    }
+}
+
+/* Project List Page */
+.project-list {
+    @apply px-4 flex flex-col gap-8;
+}
+
+@media (min-width: 768px) {
+    .project-list {
+        @apply px-0;
+    }
+}

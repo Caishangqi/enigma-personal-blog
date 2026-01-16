@@ -36,4 +36,35 @@ const tech = defineCollection({
 		}),
 });
 
-export const collections = { blog, tech };
+const project = defineCollection({
+	// Load Markdown and MDX files in the `src/content/project/` directory.
+	loader: glob({ base: './src/content/project', pattern: '**/*.{md,mdx}' }),
+	// Schema for project items
+	schema: ({ image }) =>
+		z.object({
+			// Required fields
+			title: z.string(),                       // Project title
+			pubDate: z.coerce.date(),                // Publication date
+
+			// Optional metadata
+			description: z.string().optional(),      // Short description for card/SEO
+			updatedDate: z.coerce.date().optional(), // Last update date
+
+			// Images
+			heroImage: image().optional(),           // Main banner image (16:9 recommended)
+			iconImage: image().optional(),           // Small icon for project card (square)
+
+			// Categorization
+			category: z.string().optional(),         // e.g., "Group Project", "Personal", "Open Source"
+			categoryColor: z.string().optional(),    // Category badge color (hex, e.g., "#3B82F6")
+			tags: z.array(z.string()).optional(),    // Tech tags (e.g., ["C++", "Linux", "OpenGL"])
+
+			// External links (1-4 links supported)
+			links: z.array(z.object({
+				name: z.string(),                    // Link display name (e.g., "Github", "Steam", "Itch.io")
+				url: z.string().url(),               // Full URL
+			})).max(4).optional(),
+		}),
+});
+
+export const collections = { blog, tech, project };
