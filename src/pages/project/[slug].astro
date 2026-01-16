@@ -1,0 +1,28 @@
+﻿---
+/**
+ * Project detail page
+ * URL: /project/[slug]
+ * Uses ProjectPost layout for rendering
+ */
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import ProjectPost from '../../layouts/ProjectPost.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('project');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+type Props = {
+  project: CollectionEntry<'project'>;
+};
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<ProjectPost {...project.data}>
+  <Content />
+</ProjectPost>

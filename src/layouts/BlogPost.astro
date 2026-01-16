@@ -90,13 +90,13 @@ const { title, description, pubDate, updatedDate, heroImage, category, categoryC
           <time>{formatDate(pubDate)}</time>
         </div>
 
-        <!-- Article body wrapper -->
+        <!-- Article body wrapper with TOC -->
         <div class="relative">
           <!-- Table of Contents - fixed left sidebar on lg screens -->
           <TableOfContents client:load />
 
-          <!-- Prose content - all styles defined in global.css matching Origin Realms exactly -->
-          <div class="prose mx-auto">
+          <!-- Prose content - matching Origin Realms exactly -->
+          <div class="prose prose-lg prose-invert prose-img:w-full prose-hr:border-gray-800 prose-a:transition-colors prose-img:rounded-md prose-blockquote:border-orange-500 prose-figcaption:text-center prose-figure:mb-6 prose-figcaption:italic hover:prose-a:text-orange-500 prose-code:bg-gray-900 prose-code:rounded-md prose-pre:bg-gray-900 mx-auto">
             <slot />
           </div>
         </div>
