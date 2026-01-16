@@ -1,0 +1,94 @@
+---
+/**
+ * 404 Page Not Found
+ * URL: /404
+ * Style: Following Origin Realms design exactly
+ */
+import BaseHead from '../components/BaseHead.astro';
+import PageLoader from '../components/PageLoader.astro';
+
+// React components
+import Header from '../components/react/Header';
+import Footer from '../components/react/Footer';
+
+// Constants
+import {
+  SITE_TITLE,
+  NAV_LINKS,
+  SOCIAL_LINKS,
+  FOOTER_CONFIG,
+} from '../consts';
+
+// Images
+import errorbitImage from '../assets/images/errorbit.webp';
+
+// Piston animation images for Footer
+import pistonBase from '../assets/animations/piston-base.png';
+import pistonHead from '../assets/animations/piston-head.png';
+import pistonNeck from '../assets/animations/piston-neck.png';
+
+const pistonImages = {
+  base: pistonBase.src,
+  head: pistonHead.src,
+  neck: pistonNeck.src,
+};
+---
+
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <BaseHead
+      title={`Page Not Found | ${SITE_TITLE}`}
+      description="The page you are looking for could not be found."
+    />
+  </head>
+  <body class="h-full bg-black text-gray-500">
+    <PageLoader />
+
+    <!-- Grid layout for sticky footer: auto (header) + 1fr (main) + auto (footer) -->
+    <div class="h-screen grid grid-rows-[auto_1fr_auto]">
+      <!-- Header -->
+      <div class="container mx-auto">
+        <Header
+          client:load
+          siteTitle={SITE_TITLE}
+          navLinks={NAV_LINKS}
+          socialLinks={SOCIAL_LINKS}
+          currentPath=""
+        />
+      </div>
+
+      <!-- 404 content - Following Origin Realms style exactly -->
+      <main class="pageContent">
+        <div class="max-w-3xl mx-auto py-8 lg:py-12 text-center h-full grid items-center justify-center">
+          <div>
+            <img
+              src={errorbitImage.src}
+              alt="ERR0R-Bit"
+              class="max-w-sm mx-auto mb-4"
+            />
+            <h1 class="font-bold text-3xl text-white mb-3">Page Not Found</h1>
+            <p class="mb-6">Sorry! The page you tried to access does not exist.</p>
+            <a
+              href="/"
+              class="inline-flex mt-3 py-2 px-6 font-bold text-lg rounded-md transition-colors uppercase bg-yellow-btn text-yellow-btn-text hover:bg-yellow-btn-hover"
+            >
+              <span>Return Home</span>
+            </a>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <div class="container mx-auto">
+        <Footer
+          client:visible
+          email={FOOTER_CONFIG.email}
+          socialLinks={SOCIAL_LINKS}
+          copyright={FOOTER_CONFIG.copyright}
+          pistonImages={pistonImages}
+        />
+      </div>
+    </div>
+  </body>
+</html>
