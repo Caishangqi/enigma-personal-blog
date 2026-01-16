@@ -47,7 +47,7 @@ A high-performance shader engine for Minecraft featuring real-time ray tracing, 
 
 <figure class="kg-card kg-embed-card kg-card-hascaption">
   <div class="iframe-wrap" style="padding-bottom: 56.25%">
-    <iframe width="200" height="113" src="https://www.youtube.com/embed/jnOqC-TLhaU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Shader Demo"></iframe>
+    <iframe width="200" height="113" src="https://www.youtube.com/embed/jnOqC-TLhaU?feature=oembed" style="border: 0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="Shader Demo"></iframe>
   </div>
   <figcaption>Shader Engine Demo Video</figcaption>
 </figure>

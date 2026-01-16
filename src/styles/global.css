@@ -83,15 +83,15 @@
 .page-footer .piston {
     position: absolute;
     left: 35px;
-    bottom: 0px;
+    bottom: 0;
     z-index: 10;
     cursor: pointer;
 }
 
 .page-footer .piston .head {
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
     top: -63px;
     transition: 0.2s ease-in-out;
 }
@@ -100,7 +100,7 @@
     width: 100px;
     position: relative;
     height: 76px;
-    top: 0px;
+    top: 0;
     z-index: 10;
     background-size: contain;
     background-repeat: no-repeat;
@@ -109,12 +109,12 @@
 
 .page-footer .piston .neck {
     width: 28px;
-    margin: 0px auto;
+    margin: 0 auto;
     height: 23px;
     position: absolute;
     top: 65px;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
     z-index: -1;
     transition: height 0.2s ease-in-out;
     background-size: 28px;
@@ -135,7 +135,7 @@
 }
 
 .page-footer .piston:hover .neck {
-    height: 0px;
+    height: 0;
 }
 
 /* Container - matching Origin Realms padding */
@@ -697,7 +697,7 @@ button.bg-discord:hover {
 
 /* Table of Contents - matching Origin Realms exactly */
 .toc-item.level-2 {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .toc-item.level-3 {
