@@ -1,0 +1,111 @@
+﻿---
+/**
+ * Project post detail layout
+ * Based on Origin Realms guide post style
+ * Structure: Header (Icon + Category/Title) -> Content -> Footer (no Looking For More)
+ *
+ * [DIFFERENCE FROM ORIGIN REALMS]
+ * - Added TableOfContents component for better navigation in long project documentation
+ * - Origin Realms guide pages do NOT have TOC, but we add it for improved UX
+ */
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import PageLoader from '../components/PageLoader.astro';
+
+// React components (same as home page)
+import Header from '../components/react/Header';
+import Footer from '../components/react/Footer';
+import TableOfContents from '../components/react/TableOfContents';
+
+// Constants
+import {
+  SITE_TITLE,
+  NAV_LINKS,
+  SOCIAL_LINKS,
+  FOOTER_CONFIG,
+} from '../consts';
+
+// Piston animation images for Footer
+import pistonBase from '../assets/animations/piston-base.png';
+import pistonHead from '../assets/animations/piston-head.png';
+import pistonNeck from '../assets/animations/piston-neck.png';
+
+const pistonImages = {
+  base: pistonBase.src,
+  head: pistonHead.src,
+  neck: pistonNeck.src,
+};
+
+type Props = CollectionEntry<'project'>['data'];
+
+const { title, description, heroImage, iconImage, category } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
+  </head>
+  <body class="bg-black text-gray-500">
+    <PageLoader />
+
+    <main class="pageContent">
+      <!-- Header - same as home page -->
+      <div class="container mx-auto">
+        <Header
+          client:load
+          siteTitle={SITE_TITLE}
+          navLinks={NAV_LINKS}
+          socialLinks={SOCIAL_LINKS}
+          currentPath="/project"
+        />
+      </div>
+
+      <!-- Article content - matching Origin Realms exactly -->
+      <div class="container mx-auto pt-16 pb-10">
+        <!-- Project Header - Icon + Category/Title (matching Origin Realms guide style) -->
+        <div class="project-detail-header max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-10 mb-16">
+          <!-- Icon Image -->
+          {iconImage && (
+            <div
+              class="bg-cover bg-center rounded-md w-48 h-48 shrink-0"
+              style={`background-image: url("${iconImage.src}");`}
+            />
+          )}
+          <!-- Title Section -->
+          <div>
+            {category && (
+              <div class="font-bold uppercase text-gray-500">
+                {category}
+              </div>
+            )}
+            <div class="text-5xl font-bold text-white">{title}</div>
+          </div>
+        </div>
+
+        <!-- Article body wrapper with TOC -->
+        <!-- [DIFFERENCE FROM ORIGIN REALMS] Added TOC for better navigation -->
+        <div class="relative">
+          <!-- Table of Contents - fixed left sidebar on lg screens -->
+          <TableOfContents client:load triggerSelector=".project-detail-header" />
+
+          <!-- Prose content - matching Origin Realms structure exactly -->
+          <div class="prose prose-lg prose-invert prose-img:w-full prose-hr:border-gray-800 prose-a:transition-colors prose-img:rounded-md prose-blockquote:border-orange-500 prose-figcaption:text-center prose-figure:mb-6 prose-figcaption:italic hover:prose-a:text-orange-500 prose-code:bg-gray-900 prose-code:rounded-md prose-pre:bg-gray-900 mx-auto">
+            <slot />
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer - same as home page (no Looking For More) -->
+      <div class="container mx-auto">
+        <Footer
+          client:visible
+          email={FOOTER_CONFIG.email}
+          socialLinks={SOCIAL_LINKS}
+          copyright={FOOTER_CONFIG.copyright}
+          pistonImages={pistonImages}
+        />
+      </div>
+    </main>
+  </body>
+</html>
