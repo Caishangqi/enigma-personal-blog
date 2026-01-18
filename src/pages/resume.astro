@@ -2,13 +2,18 @@
 /**
  * Resume page
  * URL: /resume
+ * Features: Hero banner + Document carousel with 3-card layout
  */
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import PageLoader from '../components/PageLoader.astro';
 
 // React components
 import Header from '../components/react/Header';
 import Footer from '../components/react/Footer';
+import ResumeBanner from '../components/react/ResumeBanner';
+import InfoButton from '../components/react/InfoButton';
+import ResumeCarousel from '../components/react/ResumeCarousel';
 
 // Constants
 import {
@@ -29,6 +34,22 @@ const pistonImages = {
   head: pistonHead.src,
   neck: pistonNeck.src,
 };
+
+// Fetch document collection and transform to DocumentCardData format
+const documents = await getCollection('document');
+
+// Sort by pubDate (newest first) and transform to card data
+const documentItems = documents
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .map((doc) => ({
+    id: doc.id,
+    title: doc.data.title,
+    subtitle: doc.data.subTitle,
+    category: doc.data.category,
+    categoryColor: doc.data.categoryColor,
+    image: doc.data.icon?.src || '',
+    link: doc.data.links?.[0]?.url || '',
+  }));
 ---
 
 <!doctype html>
@@ -57,11 +78,16 @@ const pistonImages = {
 
       <!-- Resume content -->
       <main class="pageContent">
-        <div class="container mx-auto pt-12">
-          <!-- TODO: Resume content will be added here -->
-          <div class="text-center py-12">
-            <h1 class="text-4xl font-bold text-white mb-4">Resume</h1>
-            <p class="text-gray-400 text-lg">Coming soon...</p>
+        <div class="container mx-auto pt-8">
+          <!-- Hero Banner -->
+          <ResumeBanner client:load />
+
+          <!-- Info Button -->
+          <InfoButton client:load />
+
+          <!-- Document Carousel -->
+          <div>
+            <ResumeCarousel client:load items={documentItems} />
           </div>
         </div>
       </main>

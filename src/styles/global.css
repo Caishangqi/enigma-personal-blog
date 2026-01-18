@@ -30,6 +30,100 @@
     --font-proxima: proxima-nova, sans-serif;
 }
 
+/* Global Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Header Mobile Menu - matching Origin Realms exactly */
+/* Hide mobile toggle on desktop */
+@media (min-width: 1024px) {
+    .nav .mobile-toggle {
+        display: none;
+    }
+}
+
+/* Hamburger bar styles */
+.nav .mobile-toggle .bar {
+    background: rgb(255, 255, 255);
+    height: 4px;
+    width: 30px;
+    border-radius: 100px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    top: 0;
+}
+
+.nav .mobile-toggle .bar:nth-of-type(2) {
+    margin: 6px 0;
+}
+
+/* Open state - transform to X */
+.nav .mobile-toggle.open {
+    cursor: pointer;
+}
+
+.nav .mobile-toggle.open .bar {
+    background: rgb(255, 255, 255);
+}
+
+.nav .mobile-toggle.open .bar:nth-of-type(1) {
+    transform: rotate(45deg);
+    top: 10px;
+}
+
+.nav .mobile-toggle.open .bar:nth-of-type(2) {
+    transform: rotate(180deg);
+    opacity: 0;
+}
+
+.nav .mobile-toggle.open .bar:nth-of-type(3) {
+    transform: rotate(-45deg);
+    top: -10px;
+}
+
+.nav .mobile-toggle:hover .bar {
+    background: rgb(255, 255, 255);
+}
+
+/* Mobile menu collapse - overlay style */
+@media (max-width: 1023px) {
+    .nav .menu-collapse {
+        pointer-events: none;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: rgb(0, 0, 0);
+        padding: 0.75rem 1.5rem;
+        opacity: 0;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 99999;
+    }
+
+    .nav .menu-collapse.open {
+        pointer-events: auto;
+        visibility: visible;
+        top: 100%;
+        opacity: 1;
+    }
+}
+
 /* Base Styles - in @layer base for proper Tailwind priority */
 @layer base {
     body {
@@ -79,6 +173,16 @@
         max-width: 100%;
         height: auto;
     }
+}
+
+/* Text Shadow - matching Origin Realms hero banner */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Hero Banner - default background when no image */
+.hero {
+    background-color: #aaab88;
 }
 
 /* Piston hover animation - matching Origin Realms exactly */
@@ -955,5 +1059,361 @@ button.bg-discord:hover {
 @media (min-width: 768px) {
     .project-list {
         @apply px-0;
+    }
+}
+
+/* ============================================
+   Resume Page Styles
+   Based on Figma design + Origin Realms patterns
+   ============================================ */
+
+/* Resume Banner - Hero section */
+.resume-banner {
+    @apply relative rounded-md overflow-hidden;
+    background-color: #aaab88;
+    height: 182px;
+    padding: 24px;
+}
+
+.resume-banner-content {
+    @apply flex flex-col justify-center h-full;
+}
+
+.resume-banner-title {
+    @apply font-bold text-white m-0;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.resume-banner-subtitle {
+    @apply font-bold m-0;
+    color: #fef9c3; /* yellow-100 */
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+/* Resume Carousel - Card sliding animation */
+.resume-carousel {
+    @apply flex flex-col items-center w-full;
+    max-width: 900px; /* Match viewport width */
+    margin: 0 auto;
+}
+
+.resume-carousel-empty {
+    @apply text-center py-12;
+    color: var(--color-meta-text);
+}
+
+/* Viewport - clips overflow, defines visible area */
+.resume-carousel-viewport {
+    width: 100%;
+    max-width: 900px;
+    height: 540px; /* Increased to fit large card (488px) + padding */
+    overflow: hidden;
+    position: relative;
+}
+
+/* Track - contains all cards, relative positioning for absolute children */
+.resume-carousel-track {
+    position: relative;
+    height: 100%;
+}
+
+/* Document Card - Base styles (matches Origin Realms store card exactly)
+ * Origin: rounded-lg p-6 pt-0 grid grid-rows-[1fr_auto] bg-[#f1ddca] text-black relative
+ * Enhanced with absolute positioning for carousel animation
+ */
+.document-card {
+    @apply rounded-lg cursor-pointer;
+    background-color: #f1ddca;
+    color: black;
+    padding: 24px;
+    padding-top: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+
+    /* Carousel animation: absolute positioning centered in track */
+    position: absolute;
+    top: 26px;  /* 10px + 16px to accommodate image -top-4 offset */
+    left: 50%;
+    margin-left: -162px; /* Half of large card width (324/2) */
+
+    /* Smooth transition for transform and opacity */
+    transition:
+        transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.45s ease;
+}
+
+.document-card:hover {
+    transform: scale(0.975);
+}
+
+/* Document Card - Position states for carousel animation */
+.document-card-center {
+    transform: translateX(0) scale(1);
+    z-index: 3;
+    opacity: 1;
+}
+
+.document-card-center:hover {
+    transform: translateX(0) scale(0.975);
+}
+
+.document-card-left {
+    transform: translateX(-300px) scale(0.85);
+    z-index: 2;
+    opacity: 0.7;
+}
+
+.document-card-left:hover {
+    transform: translateX(-300px) scale(0.82);
+}
+
+.document-card-right {
+    transform: translateX(300px) scale(0.85);
+    z-index: 2;
+    opacity: 0.7;
+}
+
+.document-card-right:hover {
+    transform: translateX(300px) scale(0.82);
+}
+
+.document-card-hidden {
+    transform: translateX(0) scale(0.7);
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Document Card - Disabled state (placeholder or unavailable) */
+.document-card-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.document-card-disabled:hover {
+    transform: none;
+}
+
+/* Document Card - Small variant (side cards) - 80% of large card (324x488 -> 259x390) */
+.document-card-small {
+    width: 259px;
+    min-height: 390px;
+    margin-left: -129.5px; /* Half of small card width for proper centering */
+}
+
+.document-card-small .document-card-title {
+    font-size: 24px; /* 30px * 0.8 = 24px */
+    line-height: 29px;
+}
+
+.document-card-small .document-card-subtitle {
+    font-size: 19px; /* 24px * 0.8 ≈ 19px */
+    line-height: 26px;
+}
+
+.document-card-small .document-card-image {
+    max-width: 208px; /* 260px * 0.8 = 208px */
+}
+
+/* Document Card - Large variant (center card) - matches Origin Realms exactly: 324 x 488 */
+.document-card-large {
+    width: 324px;
+    min-height: 488px;
+}
+
+/* Document Card - Image (matches Origin Realms coin-image exactly)
+ * Origin: w-full relative bg-contain h-0 max-w-[260px] mx-auto pb-[100%] bg-center bg-no-repeat -top-4
+ */
+.document-card-image {
+    @apply w-full relative bg-contain bg-center bg-no-repeat mx-auto;
+    max-width: 260px;
+    aspect-ratio: 1 / 1; /* Container stays square for consistent layout */
+    top: -16px;
+    background-color: transparent; /* Transparent - image keeps original ratio */
+}
+
+/* Document Card - Tag (matches Origin Realms bonus tag exactly)
+ * Origin: bg-red-500 font-bold inline-block mx-auto p-0.5 px-2 rounded-md text-sm text-white mb-2
+ */
+.document-card-tag {
+    @apply font-bold inline-block mx-auto rounded-md text-white;
+    padding: 2px 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+/* Document Card - Title (matches Origin Realms text-3xl exactly)
+ * Origin: text-center font-bold text-3xl
+ */
+.document-card-title {
+    @apply text-center font-bold;
+    font-size: 30px;
+    line-height: 36px;
+    color: black;
+}
+
+/* Document Card - Subtitle (matches Origin Realms text-2xl mb-4 exactly)
+ * Origin: text-center font-bold text-2xl mb-4
+ */
+.document-card-subtitle {
+    @apply text-center font-bold;
+    font-size: 24px;
+    line-height: 32px;
+    margin-bottom: 16px;
+    color: black;
+}
+
+/* Document Card - Spacer for small cards without button */
+.document-card-spacer {
+    margin-bottom: 16px;
+}
+
+/* Document Card - Button (matches Origin Realms button exactly)
+ * Origin: bg-black flex text-center items-center justify-center w-full rounded-lg
+ *         transition-opacity text-white font-bold p-4 relative cursor-pointer hover:opacity-75
+ */
+.document-card-button {
+    @apply flex text-center items-center justify-center w-full rounded-lg font-bold relative cursor-pointer;
+    background-color: black;
+    color: white;
+    padding: 16px;
+    border: none;
+    transition: opacity 0.15s ease;
+}
+
+.document-card-button:hover {
+    opacity: 0.75;
+}
+
+/* Document Card - Button text (matches Origin Realms flex flex-col items-start)
+ * Origin: flex flex-col items-start h-8 leading-none flex flex-col items-start justify-center
+ */
+.document-card-button-text {
+    @apply flex flex-col items-start justify-center;
+    height: 32px;
+    line-height: 1;
+}
+
+/* Carousel Pagination */
+.carousel-pagination {
+    @apply flex items-center justify-between px-4 w-full;
+    margin-top: 32px;
+}
+
+.carousel-pagination-btn {
+    @apply p-3 transition-all rounded cursor-pointer;
+    background-color: rgb(13, 14, 15); /* gray-900 */
+    color: rgb(107, 114, 128); /* gray-500 */
+    border: none;
+}
+
+.carousel-pagination-btn:hover {
+    background-color: rgb(31, 41, 55); /* gray-800 */
+    color: rgb(156, 163, 175); /* gray-400 */
+}
+
+.carousel-pagination-info {
+    @apply text-sm font-bold;
+    color: rgb(107, 114, 128); /* gray-500 */
+}
+
+.carousel-pagination-current {
+    color: #f472b6; /* pink-400 - matching Figma design */
+}
+
+/* Resume Page - Tablet Responsive (600px - 960px) */
+@media (max-width: 960px) and (min-width: 601px) {
+    .resume-carousel-viewport {
+        max-width: 700px;
+        height: 520px;  /* 26px top + 488px card + 6px padding */
+    }
+
+    /* Adjust card positions for narrower viewport
+     * Viewport: 700px, center: 350px
+     * Card margin-left: -162px, so card center at 350px
+     * Side card width: 259 * 0.82 = 212px, half = 106px
+     * Left card: 350 - 162 - X - 106 >= 0 => X <= 82
+     * Use 150px for partial overlap effect
+     */
+    .document-card-left {
+        transform: translateX(-150px) scale(0.82);
+    }
+
+    .document-card-left:hover {
+        transform: translateX(-150px) scale(0.80);
+    }
+
+    .document-card-right {
+        transform: translateX(150px) scale(0.82);
+    }
+
+    .document-card-right:hover {
+        transform: translateX(150px) scale(0.80);
+    }
+}
+
+/* Resume Page - Mobile Responsive */
+@media (max-width: 600px) {
+    .resume-banner {
+        height: 140px;
+        padding: 16px;
+    }
+
+    .resume-banner-title {
+        font-size: 24px;
+    }
+
+    .resume-banner-subtitle {
+        font-size: 14px;
+    }
+
+    /* Mobile: Smaller viewport, adjusted card positions */
+    .resume-carousel-viewport {
+        width: 100%;
+        max-width: 360px;
+        height: 435px;  /* 26px top + 401px card + 8px padding */
+    }
+
+    .document-card {
+        margin-left: -130px; /* Half of mobile card width (260/2) */
+    }
+
+    .document-card-small,
+    .document-card-large {
+        width: 260px;
+        min-height: 380px;
+    }
+
+    .document-card-left {
+        transform: translateX(-180px) scale(0.8);
+    }
+
+    .document-card-left:hover {
+        transform: translateX(-180px) scale(0.78);
+    }
+
+    .document-card-right {
+        transform: translateX(180px) scale(0.8);
+    }
+
+    .document-card-right:hover {
+        transform: translateX(180px) scale(0.78);
+    }
+
+    .document-card-title {
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    .document-card-subtitle {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .carousel-pagination {
+        margin-top: 24px;
     }
 }
