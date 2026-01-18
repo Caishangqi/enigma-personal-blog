@@ -67,4 +67,34 @@ const project = defineCollection({
 		}),
 });
 
-export const collections = { blog, tech, project };
+const document = defineCollection({
+	// Load Markdown and MDX files in the `src/content/document/` directory.
+	loader: glob({ base: './src/content/document', pattern: '**/*.{md,mdx}' }),
+	// Schema for document items (Resume page cards)
+	schema: ({ image }) =>
+		z.object({
+			// Required fields
+			title: z.string(),                       // Document title
+			subTitle: z.string().optional(),         // Document subtitle
+			pubDate: z.coerce.date(),                // Publication date
+
+			// Optional metadata
+			description: z.string().optional(),      // Description for SEO
+			updatedDate: z.coerce.date().optional(), // Last update date
+
+			// Images
+			icon: image().optional(),                // Card icon image
+
+			// Categorization
+			category: z.string(),                    // e.g., "PDF", "VIDEO"
+			categoryColor: z.string().optional(),    // Category badge color (hex)
+
+			// Links
+			links: z.array(z.object({
+				type: z.string(),                    // Link type (e.g., "PDF", "VIDEO")
+				url: z.string().url(),               // Full URL
+			})).optional(),
+		}),
+});
+
+export const collections = { blog, tech, project, document };
